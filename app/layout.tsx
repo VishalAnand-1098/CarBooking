@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
-import { initMongo } from "@/lib/mongodb";
 import { ensureDb } from "@/models/init";
+import { connectMongoose } from "@/lib/mongoose";
 import { Toaster } from "@/components/ui/sonner";
 
 const geist = Geist({
@@ -61,8 +61,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   try {
-    await initMongo()
-    // ensure collections and indexes exist
+    // connect using mongoose (ODM)
+    await connectMongoose()
+    // ensure collections and indexes (native driver helpers)
     await ensureDb()
   } catch (err) {
     // log but don't crash the app
