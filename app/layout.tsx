@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
+import { initMongo } from "@/lib/mongodb";
+import { ensureDb } from "@/models/init";
 import { Toaster } from "@/components/ui/sonner";
 
 const geist = Geist({
@@ -53,11 +55,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  try {
+    await initMongo()
+    // ensure collections and indexes exist
+    await ensureDb()
+  } catch (err) {
+    // log but don't crash the app
+    // eslint-disable-next-line no-console
+    console.error('Failed to initialize MongoDB:', err)
+  }
+
   return (
     <html lang="en" className={`${geist.variable} dark`}>
       <body className="min-h-screen bg-[#0B0F19] text-white antialiased">
@@ -74,5 +86,5 @@ export default function RootLayout({
         />
       </body>
     </html>
-  );
+  )
 }

@@ -38,7 +38,7 @@ A world-class, AI-powered luxury car rental and booking marketplace. Built to fe
 | Animation | **Framer Motion** |
 | Icons | **Lucide React** (+ custom brand SVGs) |
 | Forms | **React Hook Form** + **Zod** |
-| Backend | **Supabase** (Auth, Database, Storage, Realtime) |
+| Backend | **MongoDB** (Database) — replace Supabase queries with MongoDB calls in `lib/mongodb.ts` |
 | Notifications | **Sonner** |
 
 ---
@@ -98,14 +98,16 @@ npm install
 ### 2. Configure environment
 Create `.env.local`:
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+# MongoDB
+MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.mongodb.net
+MONGODB_DB=carhub360
+
+# (optional) site URL
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 ### 3. Set up Supabase (optional — app runs with mock data by default)
-Run `supabase/schema.sql` in the Supabase SQL Editor to provision:
-`profiles`, `cars`, `bookings`, `wishlist`, `reviews`, `notifications`, `partners` — all with Row Level Security, a signup trigger, and Realtime enabled.
+If you were using Supabase, migrate your schema/data into MongoDB collections. The project includes `supabase/schema.sql` as a reference for tables/fields.
 
 ### 4. Run the dev server
 ```bash
